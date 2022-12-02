@@ -1,5 +1,5 @@
-LDLIBS = -lm
-CFLAGS = -O3
+LDLIBS = -lm $(shell pkg-config --libs sdl2)
+CFLAGS = -O3 $(shell pkg-config --cflags sdl2)
 
 polymetronome: polymetronome.o
 
