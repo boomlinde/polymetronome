@@ -66,24 +66,31 @@ double sequencer_tick(struct sequencer *s, double phase, double srate)
 	return voice_tick(&s->v, srate);
 }
 
+#define DEFAULT_SRATE 48000
+#define DEFAULT_BPM 100.0
+#define DEFAULT_BASEFREQ 200.0
+#define DEFAULT_FALLOFF 0.6
+#define DEFAULT_DECAY 150.0
+#define DEFAULT_VOLUME 0.5
+#define DEFAULT_MODULATION 0.2
 void usage(const char *name)
 {
 	fprintf(stderr, "Usage: %s [OPTION] DIVISION [DIVISION...]\n", name);
 	fputs("\tOutputs one or more metronomes at the given divisions of the measure.\n", stderr);
 	fputs("Options:\n", stderr);
-	fputs("\t-r SAMPLE RATE (default: 48000)\n", stderr);
-	fputs("\t-b BPM (default: 100)\n", stderr);
-	fputs("\t-f BASE TICK FREQ (default: 120)\n", stderr);
-	fputs("\t-a FALLOFF (default: 0.6)\n", stderr);
-	fputs("\t-d DECAY (default: 50.0)\n", stderr);
-	fputs("\t-v VOLUME (default: 0.5)\n", stderr);
-	fputs("\t-m MODULATION LEVEL (default: 0.2)\n", stderr);
+	fprintf(stderr, "\t-r SAMPLE RATE (default: %d)\n", DEFAULT_SRATE);
+	fprintf(stderr, "\t-b BPM (default: %g)\n", DEFAULT_BPM);
+	fprintf(stderr, "\t-f BASE FREQ (default: %g)\n", DEFAULT_BASEFREQ);
+	fprintf(stderr, "\t-a FALLOFF (default: %g)\n", DEFAULT_FALLOFF);
+	fprintf(stderr, "\t-d DECAY (default: %g)\n", DEFAULT_DECAY);
+	fprintf(stderr, "\t-v VOLUME (default: %g)\n", DEFAULT_VOLUME);
+	fprintf(stderr, "\t-m MODULATION LEVEL (default: %g)\n", DEFAULT_MODULATION);
 }
 
 struct sequencer *seqs = NULL;
 int nseqs = 0;
 double phase = 0.0;
-double bpm = 100.0;
+double bpm = DEFAULT_BPM;
 
 SDL_AudioSpec audiospec = {0};
 void audio_cb(void *data, Uint8 *stream, int len)
@@ -107,11 +114,11 @@ int main(int argc, char **argv)
 {
 	int opt, i;
 	int err = 1;
-	double basefreq = 120.0;
-	double volume = 0.5;
-	double falloff = 0.6;
-	double decay = 50.0;
-	double modulation = 0.2;
+	double basefreq = DEFAULT_BASEFREQ;
+	double volume = DEFAULT_VOLUME;
+	double falloff = DEFAULT_FALLOFF;
+	double decay = DEFAULT_DECAY;
+	double modulation = DEFAULT_MODULATION;
 	SDL_Event e;
 	SDL_AudioDeviceID dev = 0;
 
